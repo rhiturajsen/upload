@@ -111,12 +111,9 @@ systemctl enable --now logstash
 systemctl enable --now nginx
 
 
-==================================================================================================================================
-=                                                                                                                                =
-=                       Application Deployment in kubernetes and using nginx as ingress controller                               =
-=                                                                                                                                =
-=                                                                                                                                =
-==================================================================================================================================
+
+                       Application Deployment in kubernetes and using nginx as ingress controller
+                       ==========================================================================
 
 
 
