@@ -1,5 +1,4 @@
 FROM docker.io/centos
-#RUN yum update -y
 RUN yum install -y java-1.8.0-openjdk.x86_64
 WORKDIR /opt
 
@@ -15,7 +14,6 @@ RUN tar -xvzf metricbeat-7.6.0-linux-x86_64.tar.gz
 
 ADD ./jolokia.yml /opt/metricbeat-7.6.0-linux-x86_64/modules.d/jolokia.yml
 ADD ./tomcat.yml /opt/metricbeat-7.6.0-linux-x86_64/modules.d/tomcat.yml
-ADD ./metricbeat.yml /opt/metricbeat-7.6.0-linux-x86_64/metricbeat.yml
 ADD ./tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 ADD ./jolokia.war /opt/tomcat/webapps
 ADD ./webapp.war /opt/tomcat/webapps
