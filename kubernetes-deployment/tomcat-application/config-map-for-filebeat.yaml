@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haptik-tomcat-config
+  namespace: default
+
+data:
+  filebeat.yml: |+
+    filebeat.config:
+      modules:
+        path: /usr/share/filebeat/modules.d/logstash.yml
+        reload.enabled: true
+
+    processors:
+    - add_cloud_metadata: ~
+    - add_docker_metadata: ~
+
+    filebeat.inputs:
+    - type: log
+      enabled: true
+      paths:
+        - /opt/tomcat/logs/*.log
+
+    output.logstash:
+      hosts: ["172.31.93.167:5044"]
+

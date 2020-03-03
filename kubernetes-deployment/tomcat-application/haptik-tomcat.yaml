@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: haptik-tomcat-svc
+  labels:
+    app: haptik-tomcat
+spec:
+  ports:
+  - port: 8080
+    name: haptik-tomcat
+    targetPort: 8080
+  selector:
+    app: haptik-tomcat
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: haptik-tomcat
+  labels:
+    app: haptik-tomcat
+spec:
+  serviceName: haptik-tomcat
+  replicas: 3
+  selector:
+    matchLabels:
+      app: haptik-tomcat
+  template:
+    metadata:
+      labels:
+        app: haptik-tomcat
+    spec:
+      serviceAccountName: haptik-tomcat
+      containers:
+      - name: haptik-tomcat-filebeat
+        image: docker.elastic.co/beats/filebeat:7.5.0
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /opt/tomcat/logs
+        - name: filebeat-map
+          mountPath: /usr/share/filebeat/filebeat.yml
+          subPath: filebeat.yml
+      - name: haptik-tomcat
+        image: haptik-tomcat:v1
+        volumeMounts:
+        - name: metricbeat-map
+          mountPath: /opt/metricbeat-7.6.0-linux-x86_64/metricbeat.yml
+          subPath: metricbeat.yml
+        - name: logs-volume
+          mountPath: /opt/tomcat/logs
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: logs-volume
+        emptyDir: {}  
+      - name: filebeat-map
+        configMap:
+          name: haptik-tomcat-config
+      - name: metricbeat-map
+        configMap:
+          name: haptik-tomcat-config-2

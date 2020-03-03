@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: haptik-tomcat-ingress
+spec:
+  rules:
+  - host: haptik-tomcat.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: haptik-tomcat-svc
+          servicePort: 8080
